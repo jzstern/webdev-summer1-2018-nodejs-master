@@ -4,6 +4,7 @@ module.exports = function (app) {
   app.post('/api/user', createUser);
 	app.put('/api/user/:userId', updateUser);
   app.get('/api/profile', profile);
+	app.get('/api/admin', isAdmin);
 	app.get('/api/login/profile', getUser);
   app.post('/api/logout', logout);
   app.post('/api/login', login);
@@ -22,14 +23,6 @@ module.exports = function (app) {
           res.sendStatus(404);
         }
       })
-  }
-
-  function getUser(req, res) {
-    if (req.session['currentUser'] !== undefined) {
-      res.sendStatus(200);
-    } else {
-      res.sendStatus(404);
-    }
   }
 
   function logout(req, res) {
@@ -84,4 +77,12 @@ module.exports = function (app) {
         res.send(users);
       })
   }
+
+	function getUser(req, res) {
+		if (req.session['currentUser'] !== undefined) {
+			res.sendStatus(200);
+		} else {
+			res.sendStatus(404);
+		}
+	}
 }
