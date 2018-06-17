@@ -39,21 +39,25 @@ module.exports = function (app) {
   }
 
   function unenrollStudent(req, res) {
-	  var sectionId = req.params.sectionId;
+	  var enrollmentId = req.params.enrollmentId;
 	  var currentUser = req.session.currentUser;
 	  var studentId = currentUser._id;
 
 	  // TODO ; get the enrollment and delete it?
 
 	  sectionModel
-		  .incrementSectionSeats(sectionId)
-		  .then(function () {
-			  return enrollmentModel
-				  .unenrollStudentInSection(sectionId, studentId);
-		  })
-		  .then(function (enrollment) {
-			  res.json(enrollment);
-		  })
+		  .incrementSectionSeats(studentId)
+		  .then(function() {
+	  	  return enrollmentModel
+			    .findEnrollmentById(enrollmentId)
+			    .then(function() {
+	  	  	  enrollmentModel.unenrollStudentInSection(sectionId, studentId)
+				      .then(function () {
+				      	res.sendStatus(200);
+				      	// findAllSections to re-render
+				      })
+		    })
+	  })
   }
 
   function findSectionsForCourse(req, res) {
