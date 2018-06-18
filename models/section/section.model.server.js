@@ -46,5 +46,6 @@ module.exports = {
   findSectionsForCourse: findSectionsForCourse,
   decrementSectionSeats: decrementSectionSeats,
   incrementSectionSeats: incrementSectionSeats,
+  updateSection: updateSection,
   deleteSection: deleteSection
 };
