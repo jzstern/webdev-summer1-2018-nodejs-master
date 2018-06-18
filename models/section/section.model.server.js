@@ -7,7 +7,7 @@ function createSection(section) {
 }
 
 function deleteSection(sectionId) {
-  return sectionModel.remove(sectionId);
+  return sectionModel.remove({_id: sectionId});
 }
 
 function findSectionsForCourse(courseId) {

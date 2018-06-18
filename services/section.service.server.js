@@ -3,6 +3,7 @@ module.exports = function (app) {
   app.post('/api/course/:courseId/section', createSection);
   app.get('/api/course/:courseId/section', findSectionsForCourse);
   app.post('/api/section/:sectionId/enrollment', enrollStudentInSection);
+	app.delete('/api/section/:sectionId/enrollment/:enrollmentId', unenrollStudentInSection);
   app.get('/api/student/section', findSectionsForStudent);
 
   var sectionModel = require('../models/section/section.model.server');
@@ -38,26 +39,19 @@ module.exports = function (app) {
       })
   }
 
-  function unenrollStudent(req, res) {
+  function unenrollStudentInSection(req, res) {
+	  var sectionId = req.params.sectionId;
 	  var enrollmentId = req.params.enrollmentId;
-	  var currentUser = req.session.currentUser;
-	  var studentId = currentUser._id;
 
-	  // TODO ; get the enrollment and delete it?
-
-	  sectionModel
-		  .incrementSectionSeats(studentId)
+    enrollmentModel
+		  .unenrollStudentInSection(enrollmentId)
 		  .then(function() {
-	  	  return enrollmentModel
-			    .findEnrollmentById(enrollmentId)
-			    .then(function() {
-	  	  	  enrollmentModel.unenrollStudentInSection(sectionId, studentId)
-				      .then(function () {
-				      	res.sendStatus(200);
-				      	// findAllSections to re-render
-				      })
-		    })
-	  })
+		    sectionModel
+				  .incrementSectionSeats(sectionId)
+				  .then(function() {
+				    res.sendStatus(200);
+				  })
+		  });
   }
 
   function findSectionsForCourse(req, res) {
