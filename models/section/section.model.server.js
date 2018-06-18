@@ -6,6 +6,17 @@ function createSection(section) {
   return sectionModel.create(section);
 }
 
+function updateSection(section) {
+  return sectionModel.update({
+	  _id: sectionId
+  }, {
+    $inc: {
+      title: section.name,
+      seats: section.seats
+    }
+  })
+}
+
 function deleteSection(sectionId) {
   return sectionModel.remove({_id: sectionId});
 }
